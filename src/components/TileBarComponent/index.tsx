@@ -28,9 +28,9 @@ const styles = (theme: Theme) => {
     });
 };
 
-type Props = Tile & WithStyles<typeof styles>
+type IProps = Tile & WithStyles<typeof styles>
 
-const TitleBarGridList: React.SFC<Props> = (props: Props) => {
+const TitleBarGridList: React.SFC<IProps> = (props: IProps) => {
 
     const {classes, tileData} = props;
 

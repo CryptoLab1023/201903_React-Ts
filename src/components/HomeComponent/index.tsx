@@ -12,7 +12,7 @@ import Card from '@material-ui/core/Card';
 import {HomeActions} from "../../containers/Home";
 import {hocFactory} from "../../helpers/hocCounter";
 import {AppState} from "../../store";
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -32,9 +32,9 @@ const styles = (theme: Theme) => {
     })
 };
 
-type Props = OwnProps & AppState & HomeActions & WithStyles<typeof styles>
+type IProps = IOwnProps & AppState & HomeActions & WithStyles<typeof styles>
 
-const HomeComponent: React.SFC<Props> = (props: Props) => {
+const HomeComponent: React.SFC<IProps> = (props: IProps) => {
 
     const {classes} = props;
 

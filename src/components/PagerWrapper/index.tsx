@@ -3,7 +3,7 @@ import {WithStyles, withStyles} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
 const styles = () => ({
     button: {
@@ -23,9 +23,9 @@ const styles = () => ({
     }
 });
 
-type Props = OwnProps & WithStyles<typeof styles>
+type IProps = IOwnProps & WithStyles<typeof styles>
 
-const ChevronLeftIconSample: React.SFC<Props> = (props: Props) => {
+const ChevronLeftIconSample: React.SFC<IProps> = (props: IProps) => {
 
     const {pageChange, pageId, classes} = props;
 
@@ -44,7 +44,7 @@ const ChevronLeftIconSample: React.SFC<Props> = (props: Props) => {
 
 export const ChevronLeftIconWrapper = withStyles(styles)(ChevronLeftIconSample);
 
-const ChevronRightIconSample: React.SFC<Props> = (props: Props) => {
+const ChevronRightIconSample: React.SFC<IProps> = (props: IProps) => {
 
     const {pageChange, pageId, classes} = props;
 

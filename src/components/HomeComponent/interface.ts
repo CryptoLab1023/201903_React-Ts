@@ -1,3 +1,3 @@
-export interface OwnProps {
+export interface IOwnProps {
     count: number;
 }

@@ -2,7 +2,7 @@ import * as React from 'react'
 import Left from './components/Left';
 import Right from './components/Right';
 import {WithStyles, withStyles} from "@material-ui/core";
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
 const styles = {
     root: {
@@ -10,9 +10,9 @@ const styles = {
     }
 };
 
-type Props = OwnProps & WithStyles<typeof styles>
+type IProps = IOwnProps & WithStyles<typeof styles>
 
-const Header: React.SFC<Props> = (props: Props) => {
+const Header: React.SFC<IProps> = (props: IProps) => {
     return (
         <header className={props.classes.root}>
             <Left>

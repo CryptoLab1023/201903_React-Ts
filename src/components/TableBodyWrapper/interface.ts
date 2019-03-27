@@ -1,4 +1,4 @@
-export interface OwnProps {
+export interface IOwnProps {
     items: Item[][],
 }
 

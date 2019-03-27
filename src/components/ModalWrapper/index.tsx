@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography/Typography";
 import Button from "@material-ui/core/Button/Button";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
 import classNames from "classnames";
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -18,9 +18,9 @@ const styles = (theme: Theme) => {
     });
 };
 
-type Props = OwnProps & WithStyles<typeof styles>
+type IProps = IOwnProps & WithStyles<typeof styles>
 
-const ModalWrapper: React.SFC = (props: Props) => {
+const ModalWrapper: React.SFC = (props: IProps) => {
 
     const {classes, className, width, body, title, showModal, handleModal, children, handleSubmit} = props;
 

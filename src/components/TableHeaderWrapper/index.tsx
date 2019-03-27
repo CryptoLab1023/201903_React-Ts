@@ -3,7 +3,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -15,9 +15,9 @@ const styles = (theme: Theme) => {
     });
 };
 
-type Props = OwnProps & WithStyles<typeof styles>
+type IProps = IOwnProps & WithStyles<typeof styles>
 
-const TableHeaderWrapper: React.SFC<Props> = (props: Props) => {
+const TableHeaderWrapper: React.SFC<IProps> = (props: IProps) => {
     const {items} = props;
     return (
         <TableHead>

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './style.css';
-import {OwnProps} from './interface';
+import {IOwnProps} from './interface';
 
 interface State {
 
 }
 
-class CounterComponent extends React.Component<OwnProps, State> {
+class CounterComponent extends React.Component<IOwnProps, State> {
     public render() {
         return (
             <div>

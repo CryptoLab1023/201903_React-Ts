@@ -1,8 +1,8 @@
 import * as React from 'react'
 import Logo from '../../../../cmn/images/logo.png';
-import {OwnProps} from "./interface";
+import {IOwnProps} from "./interface";
 
-const Left = (props: OwnProps) => {
+const Left = (props: IOwnProps) => {
     return (
         <div>
             <img src={Logo} alt="logo"/>

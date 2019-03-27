@@ -1,6 +1,6 @@
-export interface OwnProps {
+export interface IOwnProps {
     func: (element: string) => void,
     className: string,
     element: string,
-    children: any,
+    children: JSX.Element[] | JSX.Element
 }

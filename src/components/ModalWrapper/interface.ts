@@ -1,4 +1,4 @@
-export interface OwnProps {
+export interface IOwnProps {
     count: number;
     className: string,
     width: string,
@@ -7,5 +7,5 @@ export interface OwnProps {
     showModal: boolean,
     handleModal: () => void,
     handleSubmit: () => void,
-    children: any,
+    children: JSX.Element[] | JSX.Element
 }
