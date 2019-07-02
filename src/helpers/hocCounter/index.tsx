@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {lifecycle} from 'recompose';
+import * as React from 'react'
+import { lifecycle } from 'recompose'
 
 export const hocFactory = (component: React.SFC) =>
     lifecycle({
@@ -11,5 +11,9 @@ export const hocFactory = (component: React.SFC) =>
         },
         componentWillReceiveProps(): void {
             console.log('componentWillReceiveProps - hocFactory')
-        }
-    })(component);
+        },
+        shouldComponentUpdate(): boolean {
+            console.log('shouldComponentUpdate - hocFactory')
+            return true
+        },
+    })(component)

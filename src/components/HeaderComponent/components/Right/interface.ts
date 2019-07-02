@@ -1,9 +1,9 @@
 export interface IOwnProps {
-    items: Item[];
-    children: any,
+    items: Item[]
+    children: any
 }
 
 interface Item {
-    url: string,
-    text: string,
+    url: string
+    text: string
 }

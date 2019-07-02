@@ -1,4 +1,4 @@
 export interface IOwnProps {
-    pageId: number;
-    pageChange: (pageId: number) => void;
+    pageId: number
+    pageChange: (pageId: number) => void
 }

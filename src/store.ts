@@ -1,10 +1,11 @@
-import {combineReducers, createStore} from "redux";
-import {CountReducer, CountState} from "./reducers/CountReducer";
-import {AppState} from "./store";
+import { combineReducers, createStore } from 'redux'
+import { CountReducer, CountState } from './reducers/CountReducer'
+import { OrderReducer, OrderState } from './reducers/OrderReducer'
 
 export interface AppState {
     counter: CountState
     open: CountState
+    order: OrderState
 }
 
 const configureStore = () =>
@@ -12,11 +13,11 @@ const configureStore = () =>
         combineReducers<AppState>({
             open: CountReducer,
             counter: CountReducer,
+            order: OrderReducer,
         }),
-        {},
-    );
+        {}
+    )
 
-const store = configureStore();
+const store = configureStore()
 
-export default store;
-
+export default store

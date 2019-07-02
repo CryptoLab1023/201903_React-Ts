@@ -3,7 +3,7 @@ export interface Tile {
 }
 
 interface TileData {
-    img: string,
-    title: string,
-    author: string,
+    img: string
+    title: string
+    author: string
 }

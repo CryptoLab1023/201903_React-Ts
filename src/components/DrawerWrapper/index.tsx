@@ -1,28 +1,28 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import {createStyles, Theme, WithStyles, withStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import {IOwnProps} from "./interface";
+import * as React from 'react'
+import classNames from 'classnames'
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import { IOwnProps } from './interface'
+import * as Constant from '../../utils/Constant'
+import { Link } from 'react-router-dom'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = (theme: Theme) =>
+    createStyles({
         root: {
             display: 'flex',
         },
@@ -77,8 +77,10 @@ const styles = (theme: Theme) => {
             }),
             marginLeft: 0,
         },
-    });
-};
+        link: {
+            textDecoration: 'none',
+        },
+    })
 
 type IProps = IOwnProps & WithStyles<typeof styles>
 
@@ -87,44 +89,37 @@ interface IState {
 }
 
 class PersistentDrawerLeft extends React.PureComponent<IProps, IState> {
-
     constructor(props: Readonly<IProps>) {
-        super(props);
+        super(props)
+        this.state = { open: false }
     }
 
     public handleDrawerOpen = () => {
-        this.setState({open: true});
-    };
+        this.setState({ open: true })
+    }
 
     public handleDrawerClose = () => {
-        this.setState({open: false});
-    };
+        this.setState({ open: false })
+    }
 
     public render() {
-
-        const {classes, theme} = this.props;
-        const {open} = this.state;
+        const { classes, theme } = this.props
+        const { open } = this.state
 
         return (
             <div className={classes.root}>
-                <CssBaseline/>
+                <CssBaseline />
                 <AppBar
                     position="fixed"
                     className={classNames(classes.appBar, {
                         [classes.appBarShift]: open,
-                    })}
-                >
+                    })}>
                     <Toolbar disableGutters={!open}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={this.handleDrawerOpen}
-                            className={classNames(classes.menuButton, open && classes.hide)}
-                        >
-                            <MenuIcon/>
+                        <IconButton color="inherit" aria-label="Open drawer" onClick={this.handleDrawerOpen} className={classNames(classes.menuButton, open && classes.hide)}>
+                            <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" color="inherit" noWrap={true}>
-                            Persistent drawer
+                            {Constant.APP_NAME}
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -135,66 +130,34 @@ class PersistentDrawerLeft extends React.PureComponent<IProps, IState> {
                     open={open}
                     classes={{
                         paper: classes.drawerPaper,
-                    }}
-                >
+                    }}>
                     <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.handleDrawerClose}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
-                        </IconButton>
+                        <IconButton onClick={this.handleDrawerClose}>{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
                     </div>
-                    <Divider/>
+                    <Divider />
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem button={true} key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider/>
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button={true} key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
+                        {Constant.sideBar.map((element, index) => (
+                            <Link key={index} className={classes.link} to={element.link}>
+                                <ListItem button={true}>
+                                    <ListItemIcon>
+                                        <element.icon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={element.name} />
+                                </ListItem>
+                            </Link>
                         ))}
                     </List>
                 </Drawer>
                 <main
                     className={classNames(classes.content, {
                         [classes.contentShift]: open,
-                    })}
-                >
-                    <div className={classes.drawerHeader}/>
-                    <Typography paragraph={true}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-                        elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-                        hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-                        velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-                        Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-                        viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-                        Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-                        at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-                        ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-                    </Typography>
-                    <Typography paragraph={true}>
-                        Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-                        facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-                        tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-                        consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus
-                        sed vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in.
-                        In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-                        et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique
-                        sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo
-                        viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-                        ultrices sagittis orci a.
-                    </Typography>
+                    })}>
+                    <div className={classes.drawerHeader} />
+                    {this.props.children}
                 </main>
             </div>
-        );
+        )
     }
 }
 
-export default withStyles(styles, {withTheme: true})(PersistentDrawerLeft);
+export default withStyles(styles, { withTheme: true })(PersistentDrawerLeft)

@@ -1,9 +1,9 @@
 export interface IOwnProps {
-    items: Item[];
+    items: Item[]
 }
 
 interface Item {
-    numeric: boolean,
-    width: number,
-    title: string,
+    numeric: boolean
+    width: number
+    title: string
 }

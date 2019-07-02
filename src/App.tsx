@@ -1,18 +1,20 @@
-import * as React from 'react';
-import './App.css';
+import * as React from 'react'
+import { Switch, Route } from 'react-router-dom'
 import HomeContainer from './containers/Home'
-import Grid from '@material-ui/core/Grid';
+import DrawerWrapper from './components/DrawerWrapper'
 
 class App extends React.Component {
     public render() {
         return (
             <div className="App">
-                <Grid>
-                    <HomeContainer/>
-                </Grid>
+                <DrawerWrapper>
+                    <Switch>
+                        <Route path={'/'} exact={true} component={HomeContainer} />
+                    </Switch>
+                </DrawerWrapper>
             </div>
-        );
+        )
     }
 }
 
-export default App;
+export default App
