@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { lifecycle } from 'recompose'
 
-export const hocFactory = (component: React.SFC) =>
+export const hocFactory = (component: React.FC) =>
     lifecycle({
         componentDidMount(): void {
             console.log('componentDidMount - hocFactory')

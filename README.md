@@ -1,3 +1,89 @@
+# Typescript-React-Reduxのベストプラクティス
+
+## アーキテクチャ
+
+- index.ts: redux-storeの登録 react-router-domの登録
+    - App.ts: react-router-dom: switch routeの登録
+        - 各container.ts: componentが受け取るreducerおよびactionの型と関数を定義
+            - 各component.ts: StateとinterfaceとMUI、reducer、actionの型を含んだPropsのinterface(例:type IProps = IOwnProps & AppState & HomeActions & WithStyles<typeof styles>)
+            - 各component.tsと同系列にstyles.cssとinterface.tsを配置。これによりそれぞれ、ほかのコンポーネントと競合せず記述できる
+                - hocFactory で lifecycleは、classの中に書かない。共通のlifecycleを作成(?) => update to React-Hooks
+                    
+## reducers
+
+- 各reducer.tsを作成してinterfaceも定義
+
+```typescript
+export interface OrderState {
+    price: string
+    amount: string
+    totalAmount: string
+}
+
+const initialState: OrderState = {
+    price: '0',
+    amount: '0',
+    totalAmount: '0',
+}
+
+export const OrderReducer = reducerWithInitialState(initialState)
+    .case(OrderActions.changePrice, (state, payload) => ({ ...state, price: payload }))
+    .case(OrderActions.changeAmount, (state, payload) => ({ ...state, amount: payload }))
+    .case(OrderActions.changeTotalAmount, (state, payload) => ({ ...state, totalAmount: payload }))
+```
+## store.ts
+
+- AppState interfaceを定義 createStore reducerからimportしたinterfaceをもとにstoreを作成する
+- reducerWithInitialStateによってdispatch時のtypeのマッチングを関数レベルまで昇華
+
+```typescript
+
+export interface AppState {
+    counter: CountState
+    open: CountState
+    order: OrderState
+}
+
+const configureStore = () =>
+    createStore(
+        combineReducers<AppState>({
+            open: CountReducer,
+            counter: CountReducer,
+            order: OrderReducer,
+        }),
+        {}
+    )
+
+const store = configureStore()
+
+```
+## actions
+
+- 各reducerに対応するようにdirectoryを分ける
+- actionCreatorFactoryによって引数のデータの型を定義
+
+```typescript
+
+export const OrderActions = {
+    changePrice: actionCreator<string>('CHANGE_PRICE'),
+    changeAmount: actionCreator<string>('CHANGE_AMOUNT'),
+    changeTotalAmount: actionCreator<string>('CHANGE_TOTAL_AMOUNT'),
+}
+```
+
+## 得られる恩恵
+
+1. componentとreducer内で保持されるデータの型が保証される
+1. actionで発行されるデータの型が保証される
+1. 原則、型推論がないためコンパイル時にエラーを吐き出してくれる
+1. tslint.configによるコードの統一化
+1. interfaceによる各apiに送信する際の変数名の一致
+1. hocFactoryによるライフサイクルの分離
+1. react-hooksによるSFCのstateの保持を許可
+1. メンテナンス性の向上
+
+# Default README.md
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

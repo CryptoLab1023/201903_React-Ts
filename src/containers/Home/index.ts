@@ -7,14 +7,14 @@ import { OrderActions } from '../../actions/OrderAction'
 import HomeComponent from '../../components/HomeComponent'
 
 export interface HomeActions {
-    handleCount: (amount: number) => Action<void>
+    handleCount: (amount: number) => Action<number>
     handleUp: () => Action<void>
     handleDown: () => Action<void>
     handleOpen: () => Action<void>
     handleClose: () => Action<void>
-    changePrice: (price: string) => Action<void>
-    changeAmount: (amount: string) => Action<void>
-    changeTotalAmount: (totalAmount: string) => Action<void>
+    changePrice: (price: string) => Action<string>
+    changeAmount: (amount: string) => Action<string>
+    changeTotalAmount: (totalAmount: string) => Action<string>
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
