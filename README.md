@@ -7,7 +7,7 @@
         - 各container.ts: componentが受け取るreducerおよびactionの型と関数を定義
             - 各component.ts: StateとinterfaceとMUI、reducer、actionの型を含んだPropsのinterface(例:type IProps = IOwnProps & AppState & HomeActions & WithStyles<typeof styles>)
             - 各component.tsと同系列にstyles.cssとinterface.tsを配置。これによりそれぞれ、ほかのコンポーネントと競合せず記述できる
-                - hocFactory で lifecycleは、classの中に書かない。共通のlifecycleを作成(?) => update to React-Hooks
+                - hocFactory で 共通の関数をラッピング lifecycleは書かない　[参考](https://qiita.com/numanomanu/items/2b66d8b2887d44f857dc) => update to React-Hooks 
                     
 ## reducers
 

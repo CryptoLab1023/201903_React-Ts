@@ -25,7 +25,7 @@ export default class WebsocketProvider {
         }
 
         this.ws.onerror = () => {
-            this.closeWebsocket()
+            if (this.ws.readyState === this.ws.OPEN) this.closeWebsocket()
             setTimeout(() => this.connectToWebsocket(), 1000)
         }
 

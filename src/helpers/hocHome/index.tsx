@@ -1,19 +1,21 @@
 import * as React from 'react'
-import { lifecycle } from 'recompose'
+import WebsocketProvider from '../../utils/WebSocket'
 
-export const hocFactory = (component: React.FC) =>
-    lifecycle({
-        componentDidMount(): void {
-            console.log('componentDidMount - hocFactory')
-        },
-        componentWillMount(): void {
-            console.log('componentWillMount - hocFactory')
-        },
-        componentWillReceiveProps(): void {
-            console.log('componentWillReceiveProps - hocFactory')
-        },
-        shouldComponentUpdate(): boolean {
-            console.log('shouldComponentUpdate - hocFactory')
-            return true
-        },
-    })(component)
+export interface IHoc {
+    websocketProvider: WebsocketProvider
+}
+
+export const hocFactory = (Component: React.FC) => (props: any) => {
+    const [websocketProvider] = React.useState<WebsocketProvider>(new WebsocketProvider())
+
+    React.useEffect(() => {
+        console.log('HoC Component: update')
+        websocketProvider.send('exchange', 'currencyPairs', {})
+        return () => {
+            console.log('HoC Component: unmount')
+            websocketProvider.closeWebsocket()
+        }
+    })
+
+    return <Component {...props} websocketProvider={websocketProvider} />
+}

@@ -9,9 +9,10 @@ import Grow from '@material-ui/core/Grow'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import { HomeActions } from '../../containers/Home'
+import { hocFactory } from '../../helpers/hocHome'
 import { AppState } from '../../store'
 import { IOwnProps } from './interface'
-import WebsocketProvider from '../../utils/WebSocket'
+import { IHoc } from '../../helpers/hocHome'
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -19,13 +20,11 @@ const styles = (theme: Theme) => {
             marginTop: 100,
             padding: theme.spacing.unit * 2,
             maxWidth: 1200,
-            [theme.breakpoints.up(1200)]: {
-                marginLeft: 'auto',
-                marginRight: 'auto',
-            },
+            marginLeft: 'auto',
+            marginRight: 'auto',
         },
         card: {
-            width: 275,
+            width: '100%',
             height: 300,
         },
         container: {
@@ -38,20 +37,41 @@ const styles = (theme: Theme) => {
     })
 }
 
-type IProps = IOwnProps & AppState & HomeActions & WithStyles<typeof styles>
+type IProps = IHoc & IOwnProps & AppState & HomeActions & WithStyles<typeof styles>
 
 const HomeComponent: React.FC<IProps> = (props: IProps) => {
-    const [websocketProvider] = React.useState(new WebsocketProvider())
-    const [orderType, switchOrderType] = React.useState(0)
+    const [orderType, switchOrderType] = React.useState<number>(0)
     React.useEffect(() => {
-        console.log('WithHooks: update')
-        websocketProvider.send('exchange', 'currencyPairs', {})
-        return function cleanup() {
-            // websocketProvider.closeWebsocket()
-            console.log('WithHooks: unmount')
-        }
-    })
-    const { classes, counter, order, currencyPairs, selectedCurrencyPair, handleOpen, handleUp, handleDown, handleCount, handleClose, changePrice, changeAmount, changeTotalAmount } = props
+        console.log('changed: orderType to ' + orderType)
+    }, [orderType])
+
+    const double = React.useMemo<number>(() => {
+        return orderType * 2
+    }, [orderType])
+
+    const doubleWithUnit = React.useMemo(() => `${double} pt`, [double])
+
+    const handleClick = React.useCallback((ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        ev.preventDefault()
+        switchOrderType(prev => prev + 1)
+    }, [])
+
+    const {
+        classes,
+        counter,
+        order,
+        currencyPairs,
+        selectedCurrencyPair,
+        handleOpen,
+        handleUp,
+        handleDown,
+        handleCount,
+        handleClose,
+        changePrice,
+        changeAmount,
+        changeTotalAmount,
+        websocketProvider,
+    } = props
 
     return (
         <div>
@@ -60,11 +80,15 @@ const HomeComponent: React.FC<IProps> = (props: IProps) => {
                 <Button variant={'contained'} color={'primary'} onClick={handleOpen}>
                     Open
                 </Button>
-                <Grid container={true} spacing={8}>
-                    <Grid item={true} xs={4}>
+                <Button variant={'contained'} color={'secondary'} onClick={handleClose}>
+                    Close
+                </Button>
+                <Grid container={true} justify="center" spacing={8}>
+                    <Grid item={true} xs={12} sm={6} lg={4}>
                         <Grow in={counter.open}>
                             <Card className={classes.card}>
                                 <CardContent>
+                                    <Typography variant={'subtitle1'}>React + Redux Count up</Typography>
                                     <Typography>{counter.count}</Typography>
                                 </CardContent>
                                 <CardActions>
@@ -85,71 +109,84 @@ const HomeComponent: React.FC<IProps> = (props: IProps) => {
                                             Count 5 Up
                                         </Button>
                                     </Grid>
+                                </CardActions>
+                            </Card>
+                        </Grow>
+                    </Grid>
+                    <Grid item={true} xs={12} sm={6} lg={4}>
+                        <Grow in={counter.open}>
+                            <Card className={classes.card}>
+                                <CardContent>
+                                    <Typography variant={'subtitle1'}>React useState, useCallback, useMemo, useEffect</Typography>
+                                    <Typography>orderType: {orderType}</Typography>
+                                    <Typography>double: {double}</Typography>
+                                    <Typography>doubleWithUnit: {doubleWithUnit}</Typography>
+                                </CardContent>
+                                <CardActions>
                                     <Grid>
-                                        <Button variant={'contained'} color={'secondary'} onClick={handleClose}>
-                                            Close
-                                        </Button>
+                                        <Button variant="outlined" color={"primary"} onClick={handleClick}>Change State</Button>
                                     </Grid>
                                 </CardActions>
                             </Card>
                         </Grow>
                     </Grid>
-                    <Grid item={true} xs={4}>
+                    <Grid item={true} xs={12} sm={6} lg={4}>
                         <Grow in={counter.open}>
                             <Card className={classes.card}>
                                 <CardContent>
-                                    <Typography variant="title">Order Form</Typography>
+                                    <Typography variant="subtitle1">Typescript Exchange Order Form</Typography>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>Price</InputLabel>
+                                        <Button
+                                            variant={'contained'}
+                                            color={'primary'}
+                                            onClick={e => {
+                                                e.preventDefault()
+                                                switchOrderType(orderType === 1 ? 0 : 1)
+                                            }}>
+                                            Switch to {orderType === 0 ? 'limit' : 'market'}
+                                        </Button>
+                                    </FormControl>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>Price</InputLabel>
+                                        <Input
+                                            value={order.price}
+                                            autoFocus={true}
+                                            onChange={e => {
+                                                e.preventDefault()
+                                                changePrice(e.target.value)
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>Amount</InputLabel>
+                                        <Input
+                                            value={order.amount}
+                                            onChange={e => {
+                                                e.preventDefault()
+                                                changeAmount(e.target.value)
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>Total</InputLabel>
+                                        <Input
+                                            value={order.totalAmount}
+                                            onChange={e => {
+                                                e.preventDefault()
+                                                changeTotalAmount(e.target.value)
+                                            }}
+                                        />
+                                    </FormControl>
                                 </CardContent>
                                 <CardActions>
                                     <Grid>
                                         <FormControl className={classes.formControl}>
-                                            <InputLabel>Price</InputLabel>
-                                            <Button
-                                                variant={'contained'}
-                                                color={'primary'}
-                                                onClick={e => {
-                                                    e.preventDefault()
-                                                    switchOrderType(1 ? 0 : 1)
-                                                }}>
-                                                Switch to {orderType === 0 ? 'limit' : 'market'}
-                                            </Button>
-                                        </FormControl>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel>Price</InputLabel>
-                                            <Input
-                                                value={order.price}
-                                                autoFocus={true}
-                                                onChange={e => {
-                                                    e.preventDefault()
-                                                    changePrice(e.target.value)
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel>Amount</InputLabel>
-                                            <Input
-                                                value={order.amount}
-                                                onChange={e => {
-                                                    e.preventDefault()
-                                                    changeAmount(e.target.value)
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel>Total</InputLabel>
-                                            <Input
-                                                value={order.totalAmount}
-                                                onChange={e => {
-                                                    e.preventDefault()
-                                                    changeTotalAmount(e.target.value)
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormControl className={classes.formControl}>
                                             <Button
                                                 variant={'contained'}
                                                 color="primary"
-                                                onClick={ev => {
+                                                onClick={(ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                                                    ev.preventDefault()
                                                     const { price, amount, totalAmount } = order
                                                     websocketProvider.send('exchange', orderType === 0 ? 'limitOrder' : 'marketOrder', {
                                                         price: orderType === 0 ? price : selectedCurrencyPair.price,
@@ -165,20 +202,17 @@ const HomeComponent: React.FC<IProps> = (props: IProps) => {
                             </Card>
                         </Grow>
                     </Grid>
-                    <Grid item={true} xs={4}>
+                    <Grid item={true} xs={12} sm={6} lg={4}>
                         <Grow in={counter.open}>
                             <Card className={classes.card}>
                                 <CardContent>
-                                    <Typography variant="title">Currency Pairs</Typography>
+                                    <Typography variant="subtitle1">Currency Pairs from BEXAM Core</Typography>
                                     {currencyPairs.list.map((currencyPair, index) => (
                                         <Typography key={index} variant="body1">
                                             {currencyPair.name} / {currencyPair.pair}
                                         </Typography>
                                     ))}
                                 </CardContent>
-                                <CardActions>
-                                    <Typography variant="title">Currency Pairs</Typography>
-                                </CardActions>
                             </Card>
                         </Grow>
                     </Grid>
@@ -188,4 +222,4 @@ const HomeComponent: React.FC<IProps> = (props: IProps) => {
     )
 }
 
-export default withStyles(styles)(HomeComponent)
+export default withStyles(styles)(hocFactory(HomeComponent))
