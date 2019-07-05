@@ -71,6 +71,10 @@ export const OrderActions = {
 }
 ```
 
+## 概念図
+
+![alt text](./architecture.png)
+
 ## 得られる恩恵
 
 1. componentとreducer内で保持されるデータの型が保証される
